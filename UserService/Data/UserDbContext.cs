@@ -70,14 +70,13 @@ public class UserdbContext : DbContext
             entity.Property(e => e.Gender).HasColumnType(typeName: "BIT").HasColumnName(name: "Gender");
             entity.Property(e => e.BirthDate).HasColumnType(typeName: "DATE").HasColumnName(name: "BirthDate").HasConversion(v => v.ToDateTime(TimeOnly.MinValue), v => DateOnly.FromDateTime(v));
             entity.Property(e => e.Phone).HasColumnType(typeName: "NVARCHAR(20)").HasColumnName(name: "Phone");
-            entity.Property(e => e.Role).HasColumnType(typeName: "INT").HasColumnName(name: "Role");
         });
 
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<UserModel>().HasQueryFilter(x => x.Status == true);
 
-        modelBuilder.Entity<UserModel>().HasIndex(u => u.Fname).IsUnique();
+        modelBuilder.Entity<UserModel>().HasIndex(u => u.Email).IsUnique();
 
     }
 }
