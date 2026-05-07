@@ -1,4 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Text.RegularExpressions;
 using AutoMapper;
+using EmailValidation;
+using Microsoft.IdentityModel.Tokens;
 using UserMicroservice.Config;
 using UserMicroservice.Models;
 using UserMicroservice.Repository;
@@ -37,6 +43,29 @@ public class UserService
                     Response = null
                 };
             }
+
+            if (!EmailValidator.Validate(request.Email))
+            {
+                return new ApiResponseModel<UserViewModel>
+                {
+                    Status = false,
+                    Message = "Email không hợp lệ",
+                    Response = null
+                };
+            }
+
+            var pattern = @"^(0|\+84)[0-9]{9}$";
+
+            if (!Regex.IsMatch(request.Phone, pattern))
+            {
+                return new ApiResponseModel<UserViewModel>
+                {
+                    Status = false,
+                    Message = "SĐT không hợp lệ",
+                    Response = null
+                };
+            }
+
 
             // check ton tai
             var isUserExisted = await _unitOfWork.userRepository.GetFilter(

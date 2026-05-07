@@ -1,5 +1,16 @@
 @UserService_HostAddress = http://localhost:5179
 
+### Login Request
+POST {{UserService_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "plainPassword": "password123"
+}
+
+###
+
 GET {{UserService_HostAddress}}/weatherforecast/
 Accept: application/json
 
