@@ -1,0 +1,18 @@
+[
+  {
+    "ContainingType": "UserMicroservice.Controller.UserController",
+    "Method": "RegisterNewUser",
+    "RelativePath": "api/users/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "UserMicroservice.Models.CreateUserRequestModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
