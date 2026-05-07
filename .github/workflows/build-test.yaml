@@ -1,26 +1,27 @@
 name: ASP.NET CORE Microservice
 
-on: 
-  push: 
+on:
+  push:
     branches: [master]
+
   pull_request:
     branches: [master]
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Chechout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 10.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
 
-    - name: Restore dependencies
-      run: dotnet restore 
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build project
-      run: dotnet build --configuration Release --no-restore
+      - name: Build project
+        run: dotnet build --configuration Release --no-restore
