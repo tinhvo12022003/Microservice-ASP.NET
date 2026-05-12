@@ -4,29 +4,17 @@ services:
   userservice:
     build:
       context: .
-      dockerfile: src/UserService/Dockerfile
+      dockerfile: UserService/Dockerfile
+
     container_name: userservice
+
     restart: always
+
     ports:
-      - "3001:8080"          # Mỗi service map port khác nhau
+      - "3001:8080"
+
     env_file:
       - .env
+
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-
-  productservice:
-    build:
-      context: .
-      dockerfile: src/ProductService/Dockerfile
-    container_name: productservice
-    restart: always
-    ports:
-      - "3002:8080"
-    env_file:
-      - .env
-
-  # orderservice:
-  #   build:
-  #     context: .
-  #     dockerfile: src/OrderService/Dockerfile
-  #   ...
