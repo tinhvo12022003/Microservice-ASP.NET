@@ -1,0 +1,24 @@
+name: CI/CD Docker Deploy
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted        # Quan trọng: Chạy trên Ubuntu server
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Stop old containers
+        run: |
+          docker compose down || true
+
+      - name: Build & Run new containers
+        run: |
+          docker compose build --no-cache
+          docker compose up -d
+
+      - name: Clean old images
+        run: docker image prune -f
