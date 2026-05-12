@@ -2,14 +2,14 @@ services:
   userservice:
     build:
       context: .
-      dockerfile: UserService/Dockerfile
+      dockerfile: Dockerfile
 
     container_name: userservice
 
     restart: always
 
     ports:
-      - "3001:8080"
+      - "3001:5179"
 
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
