@@ -12,8 +12,6 @@ WORKDIR /src/UserService
 
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
-RUN dotnet ef database update
-
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
 WORKDIR /app
