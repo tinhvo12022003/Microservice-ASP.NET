@@ -7,7 +7,7 @@ namespace UserMicroservice.Repository;
 
 public class GenericRepository<T> where T : class
 {
-    private readonly UserdbContext _context;
+    protected readonly UserdbContext _context;
     private readonly DbSet<T> _dbSet;
 
     public GenericRepository(UserdbContext context)
@@ -98,6 +98,22 @@ public class GenericRepository<T> where T : class
             query = orderByDescending
                 ? query.OrderByDescending(e => EF.Property<object>(e!, sortColumn))
                 : query.OrderBy(e => EF.Property<object>(e!, sortColumn));
+        }
+        else
+        {
+            // Try to sort by 'CreatedAt' shadow property or 'Id' if available
+            var entityType = _context.Model.FindEntityType(typeof(T));
+            if (entityType != null)
+            {
+                if (entityType.FindProperty("CreatedAt") != null)
+                {
+                    query = query.OrderByDescending(e => EF.Property<object>(e!, "CreatedAt"));
+                }
+                else if (entityType.FindProperty("Id") != null)
+                {
+                    query = query.OrderByDescending(e => EF.Property<object>(e!, "Id"));
+                }
+            }
         }
 
 

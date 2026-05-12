@@ -22,6 +22,63 @@ namespace UserMicroservice.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("UserMicroservice.Models.RefreshTokenModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2")
+                        .HasColumnName("CreatedAt")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("CreatedBy")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NVARCHAR(100)")
+                        .HasDefaultValue("SYSTEM")
+                        .HasColumnName("CreatedBy");
+
+                    b.Property<DateTime>("ExpireTime")
+                        .HasColumnType("DATETIME2")
+                        .HasColumnName("ExpireTime");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(255)")
+                        .HasColumnName("RefreshToken");
+
+                    b.Property<bool>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("DATETIME2")
+                        .HasColumnName("UpdatedAt")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("NVARCHAR(100)")
+                        .HasColumnName("UpdatedBy");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("UNIQUEIDENTIFIER")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken", (string)null);
+                });
+
             modelBuilder.Entity("UserMicroservice.Models.UserModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -95,6 +152,22 @@ namespace UserMicroservice.Migrations
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("UserMicroservice.Models.RefreshTokenModel", b =>
+                {
+                    b.HasOne("UserMicroservice.Models.UserModel", "User")
+                        .WithMany("RefreshToken")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("UserMicroservice.Models.UserModel", b =>
+                {
+                    b.Navigation("RefreshToken");
                 });
 #pragma warning restore 612, 618
         }

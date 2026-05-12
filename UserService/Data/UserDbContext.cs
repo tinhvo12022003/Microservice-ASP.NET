@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Models;
 
@@ -9,7 +10,8 @@ public class UserdbContext : DbContext
     {
     }
 
-    public DbSet<Models.UserModel> Users { get; set; }
+    public DbSet<UserModel> Users { get; set; }
+    public DbSet<RefreshTokenModel> RefreshTokens {get; set;}
 
 
 
@@ -72,11 +74,25 @@ public class UserdbContext : DbContext
             entity.Property(e => e.Phone).HasColumnType(typeName: "NVARCHAR(20)").HasColumnName(name: "Phone");
         });
 
+
+        modelBuilder.Entity<RefreshTokenModel>(entity =>
+        {
+            entity.ToTable(name: "RefreshToken");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnType(typeName: "UNIQUEIDENTIFIER").HasColumnName(name: "Id").ValueGeneratedOnAdd();
+            entity.Property(e => e.RefreshToken).HasColumnType(typeName: "NVARCHAR(255)").HasColumnName(name: "RefreshToken");
+            entity.Property(e => e.ExpireTime).HasColumnType(typeName: "DATETIME2").HasColumnName(name: "ExpireTime");
+            // entity.Property(e => e.OldToken).HasColumnType(typeName: "NVARCHAR(50)").HasColumnName(name: "OldToken");
+            entity.Property(e => e.UserId).HasColumnType(typeName: "UNIQUEIDENTIFIER").HasColumnName(name: "UserId");
+            entity.HasOne(a => a.User).WithMany(b => b.RefreshToken).HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<UserModel>().HasQueryFilter(x => x.Status == true);
+        modelBuilder.Entity<RefreshTokenModel>().HasQueryFilter(x => x.Status == true);
 
         modelBuilder.Entity<UserModel>().HasIndex(u => u.Email).IsUnique();
-
+        modelBuilder.Entity<RefreshTokenModel>().HasIndex(u => u.Id).IsUnique();
     }
 }

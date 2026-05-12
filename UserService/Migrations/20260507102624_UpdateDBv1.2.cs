@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace UserMicroservice.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UpdateDBv12 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,6 @@ namespace UserMicroservice.Migrations
                     Gender = table.Column<bool>(type: "BIT", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "DATE", nullable: false),
                     Phone = table.Column<string>(type: "NVARCHAR(20)", nullable: false),
-                    Role = table.Column<int>(type: "INT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CreatedBy = table.Column<string>(type: "NVARCHAR(100)", nullable: true, defaultValue: "SYSTEM"),
                     UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValueSql: "GETUTCDATE()"),
@@ -35,16 +34,55 @@ namespace UserMicroservice.Migrations
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    RefreshToken = table.Column<string>(type: "NVARCHAR(255)", nullable: false),
+                    ExpireTime = table.Column<DateTime>(type: "DATETIME2", nullable: false),
+                    UserId = table.Column<Guid>(type: "UNIQUEIDENTIFIER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    CreatedBy = table.Column<string>(type: "NVARCHAR(100)", nullable: true, defaultValue: "SYSTEM"),
+                    UpdatedAt = table.Column<DateTime>(type: "DATETIME2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedBy = table.Column<string>(type: "NVARCHAR(100)", nullable: true),
+                    Status = table.Column<bool>(type: "BIT", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Fname",
+                name: "IX_RefreshToken_Id",
+                table: "RefreshToken",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_UserId",
+                table: "RefreshToken",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
                 table: "Users",
-                column: "Fname",
+                column: "Email",
                 unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
+
             migrationBuilder.DropTable(
                 name: "Users");
         }

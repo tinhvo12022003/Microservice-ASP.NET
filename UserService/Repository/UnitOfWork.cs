@@ -6,11 +6,13 @@ public class UnitOfWork
 {
     private readonly UserdbContext _context;
     public UserRepository userRepository {get; }
+    public RefreshTokenRepository refreshTokenRepository {get; }
 
-    public UnitOfWork (UserdbContext context, UserRepository userRepo)
+    public UnitOfWork (UserdbContext context, UserRepository userRepo, RefreshTokenRepository refreshTokenRepo)
     {
         _context = context;
         userRepository = userRepo;
+        refreshTokenRepository = refreshTokenRepo;
     }
 
     public async Task<int> CommitAsync()

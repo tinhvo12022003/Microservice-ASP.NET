@@ -161,4 +161,3 @@ D:\Microservice\UserService\obj\Debug\net10.0\refint\UserService.dll
 D:\Microservice\UserService\obj\Debug\net10.0\UserService.pdb
 D:\Microservice\UserService\obj\Debug\net10.0\UserService.genruntimeconfig.cache
 D:\Microservice\UserService\obj\Debug\net10.0\ref\UserService.dll
-D:\Microservice\UserService\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

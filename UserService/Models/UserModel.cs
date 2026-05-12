@@ -10,4 +10,6 @@ public class UserModel : BaseModel
     public bool Gender {get; set;}
     public DateOnly BirthDate {get; set;}
     public string Phone {get; set;} = string.Empty;
+
+    public ICollection<RefreshTokenModel> RefreshToken {get; set;} = new List<RefreshTokenModel>();
 }
